@@ -608,19 +608,30 @@ public class CordovaWebViewImpl implements CordovaWebView {
         public Boolean onDispatchKeyEvent(KeyEvent event) {
             int keyCode = event.getKeyCode();
             boolean isBackButton = keyCode == KeyEvent.KEYCODE_BACK;
+            String keyCodeStr = Integer.toString(keyCode);
+            LOG.d(TAG, "Inside dispatch key event handler, keycode: " + keyCodeStr);
             if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                LOG.d(TAG, "action is down");
                 if (isBackButton && mCustomView != null) {
+                    LOG.d(TAG, "check 1");
                     return true;
                 } else if (boundKeyCodes.contains(keyCode)) {
+                    LOG.d(TAG, "check 2");
                     return true;
                 } else if (isBackButton) {
+                    LOG.d(TAG, "check 3");
                     return engine.canGoBack();
+                } else {
+                    LOG.d(TAG, "check 4");
                 }
             } else if (event.getAction() == KeyEvent.ACTION_UP) {
+                LOG.d(TAG, "action is up");
                 if (isBackButton && mCustomView != null) {
+                    LOG.d(TAG, "check 5");
                     hideCustomView();
                     return true;
                 } else if (boundKeyCodes.contains(keyCode)) {
+                    LOG.d(TAG, "check 6");
                     String eventName = null;
                     switch (keyCode) {
                         case KeyEvent.KEYCODE_VOLUME_DOWN:
@@ -640,12 +651,20 @@ public class CordovaWebViewImpl implements CordovaWebView {
                             break;
                     }
                     if (eventName != null) {
+                        LOG.d(TAG, "eventName: " + eventName);
                         sendJavascriptEvent(eventName);
                         return true;
+                    } else {
+                        LOG.d(TAG, "eventName is null");
                     }
                 } else if (isBackButton) {
+                    LOG.d(TAG, "check 7");
                     return engine.goBack();
+                } else {
+                    LOG.d(TAG, "check 8");
                 }
+            } else {
+                LOG.d(TAG, "action is neither up nor down");
             }
             return null;
         }
